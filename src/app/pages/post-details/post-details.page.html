@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="!post">
+    <ion-card>
+      <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
+      <ion-card-header>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-card-header>
+    </ion-card>
+  </div>
+  <ion-img [src]="(post | async)?.imageUrl"></ion-img>
+
+  <ion-card no-margin>
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>
+        {{(post | async)?.title}}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-chip>
+        <!--              [routerLink]="['/user', post?.user.id]"-->
+
+        <ion-avatar>
+          <img [src]="(post | async)?.user.imageUrl">
+        </ion-avatar>
+        <ion-label>{{(post | async)?.user.firstName}} {{(post | async)?.user.lastName}}</ion-label>
+      </ion-chip>
+      {{(post | async)?.creationTime | date: 'medium'}}<br/>
+      {{(post | async)?.text}}
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-grid>
+      <ion-row class="ion-text-center">
+        <ion-col>
+          <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+          <span *ngIf="(post | async)?.karma > 0">+</span>
+          <ion-chip color="primary">
+            {{(post | async)?.karma}}
+          </ion-chip>
+          <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <ion-icon name="bookmark-outline" size="small"></ion-icon>
+          <ion-chip color="primary">
+            {{(post | async)?.countBookmarks}}
+          </ion-chip>
+        </ion-col>
+        <ion-col>
+          <ion-icon name="eye-outline" size="small"></ion-icon>
+          <ion-chip color="primary">
+              <span *ngIf="(post | async)?.countViews > 1000">
+                {{(post | async)?.countViews / 1000}}K
+              </span>
+            <span *ngIf="(post | async)?.countViews < 1000">
+                {{(post | async)?.countViews}}
+              </span>
+          </ion-chip>
+        </ion-col>
+        <ion-col>
+          <ion-icon name="chatbox-outline" size="small"></ion-icon>
+          <ion-chip color="primary">
+            {{(post | async)?.countComments}}
+          </ion-chip>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-card>
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+      <ion-fab-button (click)="sharePost()">
+        <ion-icon color="dark" name="share"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

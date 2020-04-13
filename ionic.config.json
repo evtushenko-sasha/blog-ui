@@ -1,7 +1,8 @@
 {
   "name": "blog-ui",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

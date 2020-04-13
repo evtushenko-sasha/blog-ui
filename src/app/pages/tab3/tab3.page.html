@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Profile
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Profile</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-item>
+    <ion-avatar slot="start" (click)="selectImageSource()" class="profile-img">
+      <ion-img [src]="profileImage"></ion-img>
+    </ion-avatar>
+  </ion-item>
+
+  <ion-card>
+    <ion-header>
+      <ion-card-title>Alex Y</ion-card-title>
+    </ion-header>
+    <ion-card-content>
+      Some text
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
