@@ -5,3 +5,15 @@ ion-content ion-toolbar {
 .skeleton-image {
   height: 24vh;
 }
+
+.header {
+  z-index: 1000;
+}
+
+.max-height{
+  height: 100px;
+}
+
+.filters-model {
+  max-height: 100px;
+}

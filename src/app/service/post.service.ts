@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, Subscription} from 'rxjs';
 import {FullPostDto} from '../model/FullPostDto';
 import {ShortPostDto} from '../model/ShortPostDto';
-import {SortType} from '../model/SortType';
 import {CacheService} from 'ionic-cache';
 import {ToastController} from '@ionic/angular';
 import {catchError, retry} from 'rxjs/operators';
@@ -26,10 +25,31 @@ export class PostService {
     return this.httpClient.get<FullPostDto>(`${environment.postsAPI}/${postId}`);
   }
 
-  getPostsByParams(page: number, size: number, sort: string,
-                   sortType: SortType, searchValue: string, tagIds: number[]): Observable<ShortPostDto[]> {
-    return this.httpClient.get<ShortPostDto[]>(`${environment.postsAPI}?page=${page}
-                                        &size=${size}&sort=${sort}&sortType=${sortType}&searchValue=${searchValue}&tagsIds=${tagIds}`);
+  getPostsByParams(page: number, size: number, sort: string, dateFrom: Date, dateTo: Date,
+                   sortType: string, searchValue: string, tagIds: number[]): Observable<ShortPostDto[]> {
+    let params = new HttpParams()
+      .set('page', String(page))
+      .set('size', String(size));
+    if (sort != null) {
+      params = params.set('sort', sort);
+    }
+
+    if (sortType != null) {
+      params = params.set('sortType', sortType);
+    }
+    if (dateFrom != null) {
+      params = params.set('dateFrom', dateFrom.toString());
+    }
+    if (dateTo != null) {
+      params = params.set('dateTo', dateTo.toString());
+    }
+    if (searchValue != null) {
+      params = params.set('searchValue', searchValue);
+    }
+    if (tagIds != null) {
+      params = params.set('tagIds', tagIds.toString());
+    }
+    return this.httpClient.get<ShortPostDto[]>(`${environment.postsAPI}`, {params});
   }
 
   getPost(): Observable<ShortPostDto[]> {
@@ -59,4 +79,11 @@ export class PostService {
     await toast.present();
   }
 
+  getUserBookmarksPostsByParams(): Observable<ShortPostDto[]> {
+    return undefined;
+  }
+
+  getAvailableSorts(): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${environment.postsAPI}/sort-types`);
+  }
 }

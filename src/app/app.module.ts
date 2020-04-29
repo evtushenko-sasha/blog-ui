@@ -12,17 +12,21 @@ import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CacheModule} from 'ionic-cache';
+import { ModalFiltersPage } from './pages/modal-filters/modal-filters-page.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, ModalFiltersPage],
+  entryComponents: [ModalFiltersPage],
   imports: [
     HttpClientModule,
     BrowserModule,
     CacheModule.forRoot(),
     IonicModule.forRoot(),
-    AppRoutingModule],
+    AppRoutingModule,
+    ReactiveFormsModule
+  ],
   providers: [
     Camera,
     SocialSharing,

@@ -1,4 +1,7 @@
 import {Component} from '@angular/core';
+import {ShortPostDto} from '../../model/ShortPostDto';
+import {Observable} from 'rxjs';
+import {PostService} from '../../service/post.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,7 +10,10 @@ import {Component} from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {
+  bookmarkedPosts: Observable<ShortPostDto[]>;
+
+  constructor(private postService: PostService) {
+    this.bookmarkedPosts = postService.getUserBookmarksPostsByParams();
   }
 
 }

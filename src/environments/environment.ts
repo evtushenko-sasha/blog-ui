@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  tagsAPI: '',
-  commentsAPI: '',
+  tagsAPI: 'http://localhost:8805/tags?page=1',
+  commentsAPI: 'http://localhost:8804/comments',
   loginAPI: '',
   postsAPI: 'http://localhost:8803/posts'
 };

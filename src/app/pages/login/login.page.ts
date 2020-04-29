@@ -28,6 +28,7 @@ export class LoginPage implements OnInit {
   }
 
   login() {
+
     const loginCredentials: LoginCredentials = this.loginFormGroup.value;
     this.authService.login(loginCredentials);
   }

@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filters</ion-title>
+    <ion-buttons>
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="filtersFormGroup">
+    <ion-item>
+      <ion-label>Date from</ion-label>
+      <ion-datetime formControlName="dateFrom"
+                    placeholder="Select Date"
+                    [(ngModel)]="selectedDateFrom"
+                    (ionChange)="dateChanged($event)"
+                    displayFormat="MM-DD-YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Date to</ion-label>
+      <ion-datetime formControlName="dateTo"
+                    placeholder="Select Date"
+                    [(ngModel)]="selectedDateTo"
+                    displayFormat="MM-DD-YYYY"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Tags</ion-label>
+
+      <ion-select multiple="true"
+                  interface="alert"
+                  id="tagsFilters"
+                  formControlName="tagIds"
+                  (ionChange)="tagsUpdate($event)"
+                  [value]="(selectedTagsIds | async)"
+                  [compareWith]="compareWithFn">
+        <ion-select-option *ngFor="let tag of (tags | async)"
+                           [value]="tag.id">{{tag.title}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!--TODO: add functionality to get count of posts by this params-->
+    <ion-button type="submit" (click)="apply()" class="ion-margin-start ion-margin-end"
+                [disabled]="filtersFormGroup.invalid" expand="block">Apply
+    </ion-button>
+  </form>
+</ion-content>

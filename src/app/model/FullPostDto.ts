@@ -5,7 +5,7 @@ export interface FullPostDto {
   id: number;
   title: string;
   text: string;
-  creationTime: string;
+  creationTime: Date;
   user: ShortUserDto;
   tags: Tag[];
   karma: number;

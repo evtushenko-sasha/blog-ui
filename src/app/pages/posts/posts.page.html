@@ -1,12 +1,59 @@
-<ion-header [translucent]="true">
+<ion-header class="header">
+
   <ion-toolbar>
-    <ion-title>
+    <ion-buttons [hidden]="showSearch" slot="start">
+      <ion-button (click)="refreshFilters()">
+        <ion-icon slot="start" name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title [hidden]="showSearch">
       Home
     </ion-title>
+
+    <ion-searchbar [hidden]="!showSearch"
+                   #search
+                   animated
+                   (ionBlur)="hideSearchBar()"
+                   (ionCancel)="hideSearchBar()"
+                   showCancelButton="focus"></ion-searchbar>
+
+    <ion-buttons slot="end">
+      <ion-button [hidden]="showSearch" (click)="showSearchBar()">
+        <ion-icon name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-header [translucent]="true">
+  <ion-toolbar #filters>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="showFilters()" expand="block">
+            <ion-icon slot="start" name="filter"></ion-icon>
+            <span slot="end">Filters</span>
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-select class="ion-padding-vertical" (ionChange)="updateSort($event)" value="sort" placeholder="Sort type"
+                      interface="action-sheet">
+            <ion-select-option *ngFor="let sort of (sorts | async)" value="{{sort}}">{{sort}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content [fullscreen]="true" scrollEvents="true" appHideHeader [filters]="filters">
+  <ion-refresher
+      slot="fixed"
+      (ionRefresh)="refreshPosts($event)">
+    <ion-refresher-content refreshingText="Refreshing..."></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="!postsList">
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
@@ -54,18 +101,13 @@
         <ion-row class="ion-text-center">
           <ion-col>
             <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
-            <span *ngIf="post.karma > 0">+</span>
             <ion-chip color="primary">
+              <span *ngIf="post.karma > 0">+</span>
               {{post.karma}}
             </ion-chip>
             <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
           </ion-col>
-          <ion-col>
-            <ion-icon name="bookmark-outline" size="small"></ion-icon>
-            <ion-chip color="primary">
-              {{post.countBookmarks}}
-            </ion-chip>
-          </ion-col>
+
           <ion-col>
             <ion-icon name="eye-outline" size="small"></ion-icon>
             <ion-chip color="primary">
@@ -88,6 +130,10 @@
 
     </ion-card>
   </div>
+  <ion-infinite-scroll (ionInfinite)="loadMorePosts($event)">
+    <ion-infinite-scroll-content loadingText="">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 
 </ion-content>

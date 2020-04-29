@@ -35,46 +35,135 @@
         <ion-label>{{(post | async)?.user.firstName}} {{(post | async)?.user.lastName}}</ion-label>
       </ion-chip>
       {{(post | async)?.creationTime | date: 'medium'}}<br/>
-      {{(post | async)?.text}}
+      <p [innerHTML]="(post | async)?.text">
+      </p>
     </ion-card-content>
   </ion-card>
   <ion-card>
-    <ion-grid>
-      <ion-row class="ion-text-center">
-        <ion-col>
-          <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+    <ion-list lines="none">
+      <ion-item>
+        <!--TODO: to thing about another one implementation of view-->
+        <ion-label>Karma</ion-label>
+        <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+        <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+        <ion-chip color="primary">
           <span *ngIf="(post | async)?.karma > 0">+</span>
-          <ion-chip color="primary">
-            {{(post | async)?.karma}}
-          </ion-chip>
-          <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <ion-icon name="bookmark-outline" size="small"></ion-icon>
-          <ion-chip color="primary">
-            {{(post | async)?.countBookmarks}}
-          </ion-chip>
-        </ion-col>
-        <ion-col>
-          <ion-icon name="eye-outline" size="small"></ion-icon>
-          <ion-chip color="primary">
-              <span *ngIf="(post | async)?.countViews > 1000">
-                {{(post | async)?.countViews / 1000}}K
-              </span>
-            <span *ngIf="(post | async)?.countViews < 1000">
-                {{(post | async)?.countViews}}
-              </span>
-          </ion-chip>
-        </ion-col>
-        <ion-col>
-          <ion-icon name="chatbox-outline" size="small"></ion-icon>
-          <ion-chip color="primary">
-            {{(post | async)?.countComments}}
-          </ion-chip>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+          {{(post | async)?.karma}}
+        </ion-chip>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Bookmarks
+        </ion-label>
+        <ion-icon name="bookmark-outline" size="small"></ion-icon>
+        <ion-chip color="primary">
+          {{(post | async)?.countBookmarks}}
+        </ion-chip>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Views
+        </ion-label>
 
+        <ion-icon name="eye-outline" size="small"></ion-icon>
+        <ion-chip color="primary">
+          {{(post | async)?.countViews}}
+        </ion-chip>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Comments
+        </ion-label>
+
+        <ion-icon name="chatbox-outline" size="small"></ion-icon>
+        <ion-chip color="primary">
+          {{(post | async)?.countComments}}
+        </ion-chip>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Comments:</ion-card-title>
+      <form [formGroup]="commentFormGroup">
+        <ion-item>
+          <ion-label position="floating">Comment text</ion-label>
+          <ion-input #commentInput formControlName="text" type="text"></ion-input>
+        </ion-item>
+        <ion-button type="submit" class="ion-margin-top"
+                    [disabled]="commentFormGroup.invalid" (click)="commentForm()" expand="full">Post comment
+        </ion-button>
+      </form>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+
+          </ion-col>
+          <ion-col>
+            <ion-select class="ion-padding-vertical" value="sort" (ionChange)="sortComments($event)"
+                        placeholder="Sort type" interface="action-sheet">
+              <ion-select-option *ngFor="let sort of (sorts | async)" value="{{sort}}">{{sort}}</ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-list #commentsList>
+        <ion-item-sliding *ngFor="let comment of (comments | async)">
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <!--            routerLink="users/{{comment.user.id}}"-->
+                  Posted by
+                  <ion-chip>
+                    <ion-avatar>
+                      <img [src]="comment.user.imageUrl">
+                    </ion-avatar>
+                    <ion-text>{{comment.user.firstName}} {{comment.user.lastName}}</ion-text>
+                  </ion-chip>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  Created at {{comment.creationTime | date: 'medium'}}
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-text>
+                    {{comment.text}}
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-chip>
+                    <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+                    <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+                    <ion-chip color="primary">
+                      <span *ngIf="(post | async)?.karma > 0">+</span>
+                      {{(post | async)?.karma}}
+                    </ion-chip>
+                  </ion-chip>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item-options side="end" (ionSwipe)="deleteComment(comment)">
+            <ion-item-option color="danger" expandable>
+              <ion-icon slot="icon-only" name="trash"></ion-icon> Delete
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+      <ion-infinite-scroll (ionInfinite)="loadMoreComments($event)">
+        <ion-infinite-scroll-content loadingText="">
+
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-card-header>
   </ion-card>
 
   <ion-fab vertical="top" horizontal="end" slot="fixed">
@@ -83,7 +172,10 @@
     </ion-fab-button>
     <ion-fab-list side="bottom">
       <ion-fab-button (click)="sharePost()">
-        <ion-icon color="dark" name="share"></ion-icon>
+        <ion-icon name="share-social"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="addToBookmarks()">
+        <ion-icon name="bookmark-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>

@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: 'modal-filters',
+    loadChildren: () => import('./pages/modal-filters/model-filters.module').then(m => m.ModelFiltersPageModule)
   }
 ];
 

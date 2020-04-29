@@ -6,4 +6,6 @@ export interface Comment {
   text: string;
   karma: number;
   parentId: number;
+  postId: number;
+  creationTime: Date;
 }
