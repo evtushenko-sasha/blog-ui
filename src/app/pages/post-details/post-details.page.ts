@@ -27,6 +27,7 @@ export class PostDetailsPage implements OnInit {
   private commentFormGroup: FormGroup;
   @ViewChild(IonInput, {static: false}) commentInput: IonInput;
   @ViewChild(IonList, {static: false}) commentsList: IonList;
+  private bookmarked: Observable<boolean>;
 
   constructor(private postService: PostService,
               private socialSharing: SocialSharing,
@@ -45,6 +46,9 @@ export class PostDetailsPage implements OnInit {
     this.commentFormGroup = this.formBuilder.group({
       text: ['', Validators.required]
     });
+    this.post.subscribe(post => {
+      this.bookmarked = bookmarkService.containsInUserPostBookmarks(post.id);
+    });
   }
 
   ngOnInit() {
@@ -61,6 +65,15 @@ export class PostDetailsPage implements OnInit {
   addToBookmarks() {
     this.post.subscribe(post => {
         this.bookmarkService.addPostToBookmarks(post.id);
+        this.bookmarked = new Observable<boolean>(subscriber => subscriber.next(true));
+      }
+    );
+  }
+
+  deleteBookmarks() {
+    this.post.subscribe(post => {
+        this.bookmarkService.deleteFromBookmarks(post.id);
+        this.bookmarked = new Observable<boolean>(subscriber => subscriber.next(false));
       }
     );
   }
@@ -146,4 +159,6 @@ export class PostDetailsPage implements OnInit {
     });
     await alert.present();
   }
+
+
 }

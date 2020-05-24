@@ -36,9 +36,10 @@ export class PostsPage implements OnInit {
     this.pageSize = 10;
     this.showSearch = false;
     this.sorts = this.postService.getAvailableSorts();
+    this.sortType = SortType.DESC;
     this.tagIds = new BehaviorSubject<number[]>(null);
     this.postsList = postService.getPostsByParams(this.page, this.pageSize, this.sort,
-      this.selectedDateFrom, this.selectedDateTo, SortType.ASC, this.searchValue, null);
+      this.selectedDateFrom, this.selectedDateTo, this.sortType, this.searchValue, this.tagIds.getValue());
   }
 
   ngOnInit() {
@@ -47,17 +48,19 @@ export class PostsPage implements OnInit {
   async loadMorePosts(event) {
     this.page++;
     this.postsList.subscribe(posts => {
-      this.postService.getPost().subscribe(newPosts => {
-        posts = posts.concat(newPosts);
-        event.target.complete();
-        this.postsList = new Observable<ShortPostDto[]>(subscriber => subscriber.next(posts));
-      });
+      this.postService.getPostsByParams(this.page, this.pageSize, this.sort,
+        this.selectedDateFrom, this.selectedDateTo, this.sortType, this.searchValue, this.tagIds.getValue())
+        .subscribe(newPosts => {
+          posts = posts.concat(newPosts);
+          event.target.complete();
+          this.postsList = new Observable<ShortPostDto[]>(subscriber => subscriber.next(posts));
+        });
     });
 
   }
 
   async refreshPosts(event) {
-    this.postsList = this.postService.getPost();
+    this.refreshPostsFromRemote();
     this.postsList.subscribe(posts => {
       event.target.complete();
       this.page = 0;
@@ -71,14 +74,25 @@ export class PostsPage implements OnInit {
     }, 100);
   }
 
-  async hideSearchBar() {
+  async hideSearchBar(event) {
     setTimeout(() => {
       this.showSearch = false;
+      if (event.target.value !== this.searchValue) {
+        this.searchValue = event.target.value;
+        this.page = 0;
+        this.refreshPostsFromRemote();
+      }
     }, 200);
   }
 
   async refreshFilters() {
-
+    this.page = 0;
+    this.selectedDateFrom = null;
+    this.selectedDateTo = null;
+    this.tagIds = new BehaviorSubject<number[]>(null);
+    this.sort = null;
+    this.searchValue = null;
+    this.refreshPostsFromRemote();
   }
 
   async showFilters() {
@@ -97,17 +111,24 @@ export class PostsPage implements OnInit {
       this.selectedDateFrom = detail.data.selectedDateFrom;
       this.selectedDateTo = detail.data.selectedDateTo;
       this.tagIds.next(detail.data.selectedTagsIds);
-      this.tagIds.subscribe(tags => {
-        this.postsList = this.postService.getPostsByParams(this.page, this.pageSize, this.sort,
-          this.selectedDateFrom, this.selectedDateTo, SortType.DESC, this.searchValue, tags);
-      });
+      this.refreshPostsFromRemote();
     });
     return await modal.present();
   }
 
   updateSort(event) {
     this.sort = event.target.value;
+    this.refreshPostsFromRemote();
+  }
+
+  async refreshPostsFromRemote() {
     this.postsList = this.postService.getPostsByParams(this.page, this.pageSize, this.sort,
-      this.selectedDateFrom, this.selectedDateTo, SortType.DESC, this.searchValue, this.tagIds.getValue());
+      this.selectedDateFrom, this.selectedDateTo, this.sortType, this.searchValue, this.tagIds.getValue());
+  }
+
+  searchPosts(event) {
+    this.searchValue = event.target.value;
+    this.page = 0;
+    this.refreshPostsFromRemote();
   }
 }

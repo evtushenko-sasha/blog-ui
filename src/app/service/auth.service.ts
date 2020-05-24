@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {LoginCredentials} from '../model/LoginCredentials';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');
 
-      // this.httpClient.post(`${environment.loginAPI}/login`, JSON.stringify(credentials), {headers})
+      // this.httpClient.post(`${environment.loginAPI}/oauth/token`, credentials, {headers})
       //   .subscribe(res => {
       //     resolve(res.json());
       //   }, (err) => {

@@ -18,6 +18,7 @@
           <ion-input formControlName="password" type="password"></ion-input>
         </ion-item>
         <ion-button type="submit" (click)="login()" class="ion-margin-top"
+                    routerLink="/tabs/posts"
                     [disabled]="loginFormGroup.invalid" expand="full">Login
         </ion-button>
       </form>

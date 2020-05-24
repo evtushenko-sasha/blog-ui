@@ -6,8 +6,11 @@ export const environment = {
   production: false,
   tagsAPI: 'http://localhost:8805/tags?page=1',
   commentsAPI: 'http://localhost:8804/comments',
-  loginAPI: '',
-  postsAPI: 'http://localhost:8803/posts'
+  loginAPI: 'http://localhost:8081/auth',
+  bookmarkAPI: 'http://localhost:8807/bookmarks',
+  postsAPI: 'http://localhost:8803/posts',
+  username: 'browser',
+  appPassword: '1234'
 };
 
 /*

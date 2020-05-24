@@ -13,15 +13,16 @@ import {catchError, retry} from 'rxjs/operators';
 })
 export class PostService {
 
-  private subscription: Subscription;
-
   constructor(private httpClient: HttpClient,
               private cache: CacheService,
               private toastController: ToastController) {
     this.subscription = new Subscription();
   }
 
+  private subscription: Subscription;
+
   getPostById(postId: number): Observable<FullPostDto> {
+    console.log('+++++++++++++++++++++++++++');
     return this.httpClient.get<FullPostDto>(`${environment.postsAPI}/${postId}`);
   }
 
@@ -38,27 +39,22 @@ export class PostService {
       params = params.set('sortType', sortType);
     }
     if (dateFrom != null) {
-      params = params.set('dateFrom', dateFrom.toString());
+      params = params.set('dateFrom', dateFrom.toLocaleDateString());
     }
     if (dateTo != null) {
-      params = params.set('dateTo', dateTo.toString());
+      params = params.set('dateTo', dateTo.toLocaleDateString());
     }
     if (searchValue != null) {
-      params = params.set('searchValue', searchValue);
+      params = params.set('search', searchValue);
     }
     if (tagIds != null) {
       params = params.set('tagIds', tagIds.toString());
     }
-    return this.httpClient.get<ShortPostDto[]>(`${environment.postsAPI}`, {params});
-  }
-
-  getPost(): Observable<ShortPostDto[]> {
-    const request = this.httpClient.get<ShortPostDto[]>(`${environment.postsAPI}`)
-      .pipe(
-        retry(1),
-        catchError(this.handlerError)
-      );
-    return this.cache.loadFromObservable(environment.postsAPI, request);
+    const request = this.httpClient.get<ShortPostDto[]>(`${environment.postsAPI}`, {params}).pipe(
+      retry(1),
+      catchError(this.handlerError)
+    );
+    return this.cache.loadFromObservable(environment.postsAPI + page + searchValue + tagIds + sort, request);
   }
 
   async handlerError(error) {
@@ -79,9 +75,6 @@ export class PostService {
     await toast.present();
   }
 
-  getUserBookmarksPostsByParams(): Observable<ShortPostDto[]> {
-    return undefined;
-  }
 
   getAvailableSorts(): Observable<string[]> {
     return this.httpClient.get<string[]>(`${environment.postsAPI}/sort-types`);

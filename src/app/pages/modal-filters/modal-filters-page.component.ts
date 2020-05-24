@@ -78,11 +78,10 @@ export class ModalFiltersPage implements OnInit {
 
   apply() {
     this.modalController.dismiss({
-      selectedDateFrom: this.selectedDateFrom,
-      selectedDateTo: this.selectedDateTo,
+      selectedDateFrom: new Date(this.selectedDateFrom),
+      selectedDateTo: new Date(this.selectedDateTo),
       selectedTagsIds: this.filtersFormGroup.get('tagIds').value
     });
-    alert(JSON.stringify(this.filtersFormGroup.get('tagIds').value));
   }
 
   async tagsUpdate(event) {
@@ -93,22 +92,8 @@ export class ModalFiltersPage implements OnInit {
     this.selectedTagsIds.subscribe(el => {
       this.tagsFilters.value = el;
     });
-    // alert(JSON.stringify(event.target.value));
-    //
-    // this.selectedTags = new Observable<Tag[]>(subscriber => {
-    //   subscriber.next(event.target.value);
-    // });
-    console.log('++++++++++++++++++++++++++++++++++++++=');
-    //
-    // const tagsFilters = document.getElementById('tagsFilters');
-    //
-    // this.selectedTags.subscribe(selected => {
-    //   tagsFilters.value = selected;
-    // });
   }
 
   dateChanged(event) {
-    console.log(event.detail.value);
-    console.log(this.selectedDateFrom);
   }
 }

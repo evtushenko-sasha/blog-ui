@@ -1,28 +1,8 @@
 <ion-header class="header">
-
   <ion-toolbar>
-    <ion-buttons [hidden]="showSearch" slot="start">
-      <ion-button (click)="refreshFilters()">
-        <ion-icon slot="start" name="refresh"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title [hidden]="showSearch">
-      Home
+    <ion-title>
+      Favorite
     </ion-title>
-    <!--TODO: add popular search queries -->
-    <ion-searchbar [hidden]="!showSearch"
-                   #search
-                   animated
-                   (ionBlur)="hideSearchBar($event)"
-                   (ionCancel)="hideSearchBar($event)"
-                   (ionInput)="searchPosts($event)"
-                   showCancelButton="focus"></ion-searchbar>
-
-    <ion-buttons slot="end">
-      <ion-button [hidden]="showSearch" (click)="showSearchBar()">
-        <ion-icon name="search"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -31,17 +11,11 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button (click)="showFilters()" expand="block">
-            <ion-icon slot="start" name="filter"></ion-icon>
-            <span slot="end">Filters</span>
-          </ion-button>
         </ion-col>
         <ion-col>
-          <ion-select class="ion-padding-vertical" (ionChange)="updateSort($event)"
-                      [ngModel]="sort"
-                      ngDefaultControl
+          <ion-select class="ion-padding-vertical" (ionChange)="updateSort($event)" [ngModel]="sort"
+                      ngDefaultControl placeholder="Sort type"
                       name="sorts"
-                      placeholder="Sort type"
                       interface="action-sheet">
             <ion-select-option *ngFor="let s of (sorts | async)"
                                value="{{s}}">{{s}}</ion-select-option>
@@ -49,7 +23,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
   </ion-toolbar>
 
 </ion-header>
@@ -60,7 +33,7 @@
       (ionRefresh)="refreshPosts($event)">
     <ion-refresher-content refreshingText="Refreshing..."></ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="!postsList">
+  <div *ngIf="!bookmarkedPosts">
     <ion-card>
       <ion-skeleton-text class="skeleton-image" animated></ion-skeleton-text>
       <ion-card-header>
@@ -85,7 +58,7 @@
       </ion-card-header>
     </ion-card>
   </div>
-  <div *ngFor="let post of (postsList | async)">
+  <div *ngFor="let post of (bookmarkedPosts | async)">
     <ion-card>
       <ion-img *ngIf="post" [src]="post.imageUrl"
                [routerLink]="[post.id]"></ion-img>
@@ -140,6 +113,4 @@
     <ion-infinite-scroll-content loadingText="">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
-
 </ion-content>

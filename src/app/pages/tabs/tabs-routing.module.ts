@@ -23,12 +23,17 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab2',
+        path: 'bookmarks',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../bookmarks/bookmarks.module').then(m => m.BookmarksPageModule)
+          },
+          {
+            path: ':postId',
+            loadChildren: () =>
+              import('../post-details/post-details.module').then(m => m.PostDetailPageModule)
           }
         ]
       },

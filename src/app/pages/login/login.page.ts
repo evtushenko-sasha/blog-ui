@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoginCredentials} from '../../model/LoginCredentials';
 import {AuthService} from '../../service/auth.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginPage implements OnInit {
 
   logForm() {
     console.log(this.loginFormGroup.value);
+
   }
 
   login() {

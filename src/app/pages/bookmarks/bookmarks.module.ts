@@ -3,18 +3,20 @@ import {RouterModule} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {Tab2Page} from './tab2.page';
+import {BookmarksPage} from './bookmarks.page';
 import {ExploreContainerComponentModule} from '../../explore-container/explore-container.module';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    SharedModule,
     ExploreContainerComponentModule,
-    RouterModule.forChild([{path: '', component: Tab2Page}])
+    RouterModule.forChild([{path: '', component: BookmarksPage}])
   ],
-  declarations: [Tab2Page]
+  declarations: [BookmarksPage]
 })
-export class Tab2PageModule {
+export class BookmarksPageModule {
 }
