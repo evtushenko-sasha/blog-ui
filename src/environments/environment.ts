@@ -8,7 +8,8 @@ export const environment = {
   commentsAPI: 'http://localhost:8804/comments',
   loginAPI: 'http://localhost:8081/auth',
   bookmarkAPI: 'http://localhost:8807/bookmarks',
-  postsAPI: 'http://localhost:8803/posts',
+  // postsAPI: 'http://localhost:8803/posts',
+  postsAPI: 'https://blog-post-service.herokuapp.com//posts',
   username: 'browser',
   appPassword: '1234'
 };
