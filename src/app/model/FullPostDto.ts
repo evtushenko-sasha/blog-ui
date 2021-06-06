@@ -14,6 +14,4 @@ export interface FullPostDto {
   countComments: number;
   imageUrl: string;
   bookmarked: boolean;
-//    TODO: decide about the necessary of this field + recommendations for
-//  comments: Comment[];
 }

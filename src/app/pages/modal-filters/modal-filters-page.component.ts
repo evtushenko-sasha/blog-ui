@@ -66,7 +66,6 @@ export class ModalFiltersPage implements OnInit {
   }
 
   compareWithFn(o1, o2) {
-    console.log(o1 + ' - ' + o2 + ' ' + (o1 === o2));
     return o1 === o2;
   }
 

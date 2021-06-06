@@ -9,6 +9,7 @@ import {CommentService} from '../../service/comment.service';
 import {BookmarkService} from '../../service/bookmark.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, IonInput, IonList, ToastController} from '@ionic/angular';
+import {ShortUserDto} from "../../model/ShortUserDto";
 
 @Component({
   selector: 'app-post-details',
@@ -115,6 +116,14 @@ export class PostDetailsPage implements OnInit {
     const comment: Comment = this.commentFormGroup.value;
     await this.post.toPromise().then(post => {
       comment.postId = post.id;
+      comment.karma = 0;
+      comment.user = {
+        id: 9,
+        firstName: 'Valik',
+        lastName: 'RUVDS.com',
+        imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+        login: 'ValikRUVDS.com'
+      } as ShortUserDto;
     });
     this.commentService.addComment(comment)
       .then(el => {

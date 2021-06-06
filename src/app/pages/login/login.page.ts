@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
   }
 
   login() {
+    setTimeout(() => {}, 5000);
 
     const loginCredentials: LoginCredentials = this.loginFormGroup.value;
     this.authService.login(loginCredentials);

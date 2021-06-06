@@ -45,19 +45,18 @@ export class PostsPage implements OnInit {
   ngOnInit() {
   }
 
-  async loadMorePosts(event) {
-    this.page++;
-    this.postsList.subscribe(posts => {
-      this.postService.getPostsByParams(this.page, this.pageSize, this.sort,
-        this.selectedDateFrom, this.selectedDateTo, this.sortType, this.searchValue, this.tagIds.getValue())
-        .subscribe(newPosts => {
-          posts = posts.concat(newPosts);
-          event.target.complete();
-          this.postsList = new Observable<ShortPostDto[]>(subscriber => subscriber.next(posts));
-        });
-    });
-
-  }
+  // async loadMorePosts(event) {
+  //   this.page++;
+  //   this.postsList.subscribe(posts => {
+  //     this.postService.getPostsByParams(this.page, this.pageSize, this.sort,
+  //       this.selectedDateFrom, this.selectedDateTo, this.sortType, this.searchValue, this.tagIds.getValue())
+  //       .subscribe(newPosts => {
+  //         posts = posts.concat(newPosts);
+  //         event.target.complete();
+  //         this.postsList = new Observable<ShortPostDto[]>(subscriber => subscriber.next(posts));
+  //       });
+  //   });
+  // }
 
   async refreshPosts(event) {
     this.refreshPostsFromRemote();

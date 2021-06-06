@@ -22,7 +22,28 @@
                     [disabled]="loginFormGroup.invalid" expand="full">Login
         </ion-button>
       </form>
+      <div class="ion-text-center">
+        <ion-button type="submit" (click)="login()" class="ion-margin-top"
+                    routerLink="/tabs/posts">
+          <ion-icon name="logo-google"></ion-icon>
+        </ion-button>
+        <ion-button type="submit" (click)="login()" class="ion-margin-top"
+                    routerLink="/tabs/posts">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </ion-button>
+        <ion-button type="submit" (click)="login()" class="ion-margin-top"
+                    routerLink="/tabs/posts">
+          <ion-icon name="logo-vk"></ion-icon>
+        </ion-button>
+        <ion-button type="submit" (click)="login()" class="ion-margin-top"
+                    routerLink="/tabs/posts">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </ion-button>
+      </div>
     </ion-card-content>
+
   </ion-card>
 
 </ion-content>
+
+
