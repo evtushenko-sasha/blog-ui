@@ -10,6 +10,7 @@ import {BookmarkService} from '../../service/bookmark.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, IonInput, IonList, ToastController} from '@ionic/angular';
 import {ShortUserDto} from "../../model/ShortUserDto";
+import {ShortPostDto} from "../../model/ShortPostDto";
 
 @Component({
   selector: 'app-post-details',
@@ -29,6 +30,7 @@ export class PostDetailsPage implements OnInit {
   @ViewChild(IonInput, {static: false}) commentInput: IonInput;
   @ViewChild(IonList, {static: false}) commentsList: IonList;
   private bookmarked: Observable<boolean>;
+  private recommendations: Observable<ShortPostDto[]>;
 
   constructor(private postService: PostService,
               private socialSharing: SocialSharing,
@@ -50,6 +52,7 @@ export class PostDetailsPage implements OnInit {
     this.post.subscribe(post => {
       this.bookmarked = bookmarkService.containsInUserPostBookmarks(post.id);
     });
+    this.recommendations = postService.getRecommendationsByPostId(postId);
   }
 
   ngOnInit() {

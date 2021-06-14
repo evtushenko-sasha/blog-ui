@@ -84,6 +84,62 @@
   </ion-card>
 
   <ion-card>
+    <ion-card-title class="ion-text-center">Recommendations:</ion-card-title>
+    <div *ngFor="let post of (recommendations | async)">
+        <ion-card>
+          <ion-img *ngIf="post" [src]="post.imageUrl"
+                   [routerLink]="[post.id]"></ion-img>
+          <ion-card-header>
+            <ion-card-title [routerLink]="[post.id]">{{post.title}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <!--        <ion-chip routerLink="users/{{post.user.id}}">-->
+            <!--          <ion-avatar>-->
+            <!--            <img [src]="post.user.imageUrl">-->
+            <!--          </ion-avatar>-->
+            <!--          <ion-label>{{post.user.firstName}} {{post.user.lastName}}</ion-label>-->
+            <!--        </ion-chip>-->
+            {{post.creationTime | date: 'medium'}}
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-grid>
+            <ion-row class="ion-text-center">
+              <ion-col>
+                <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+                <ion-chip color="primary">
+                  <span *ngIf="post.karma > 0">+</span>
+                  {{post.karma}}
+                </ion-chip>
+                <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+              </ion-col>
+
+              <ion-col>
+                <ion-icon name="eye-outline" size="small"></ion-icon>
+                <ion-chip color="primary">
+              <span *ngIf="post.countViews > 1000">
+                {{post.countViews / 1000}}K
+              </span>
+                  <span *ngIf="post.countViews < 1000">
+                {{post.countViews}}
+              </span>
+                </ion-chip>
+              </ion-col>
+              <ion-col>
+                <ion-icon name="chatbox-outline" size="small"></ion-icon>
+                <ion-chip color="primary">
+                  {{post.countComments}}
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-card>
+    </div>
+  </ion-card>
+
+
+  <ion-card>
     <ion-card-header>
       <ion-card-title class="ion-text-center">Comments:</ion-card-title>
       <form [formGroup]="commentFormGroup">

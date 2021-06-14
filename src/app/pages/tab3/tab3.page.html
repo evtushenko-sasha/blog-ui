@@ -1,31 +1,179 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Profile
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            Profile
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-item>
-    <ion-avatar slot="start" (click)="selectImageSource()" class="profile-img">
-      <ion-img [src]="profileImage"></ion-img>
-    </ion-avatar>
-  </ion-item>
-
-  <ion-card>
-    <ion-header>k
-      <ion-card-title>Alex Y</ion-card-title>
+    <ion-header collapse="condense">
+        <ion-toolbar>
+            <ion-title size="large">Profile</ion-title>
+        </ion-toolbar>
     </ion-header>
-    <ion-card-content>
-      Some text
-    </ion-card-content>
-  </ion-card>
+
+    <ion-item>
+        <ion-avatar slot="start" (click)="selectImageSource()" class="profile-img">
+            <ion-img [src]="(currentUser | async)?.imageUrl"></ion-img>
+        </ion-avatar>
+    </ion-item>
+
+    <ion-card>
+        <ion-header>
+            <ion-card-title>{{(currentUser | async)?.firstName}} {{(currentUser | async)?.lastName}}</ion-card-title>
+        </ion-header>
+        <ion-card-content>
+            {{(currentUser | async)?.description}}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-list class="accordion-list">
+        <ion-list-header no-lines no-padding>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-button ion-item expand="full" fill="solid" (click)="toggleSelectPost()" detail-none
+                                    [ngClass]="{'section-active': postOpen, 'section': !postOpen}">
+                            <ion-icon item-left name="arrow-forward" *ngIf="!postOpen"></ion-icon>
+                            <ion-icon item-left name="arrow-down" *ngIf="postOpen"></ion-icon>
+                            User posts
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-item *ngIf="postOpen" detai-none class="clid-item" text-wrap>
+                            <div *ngFor="let post of posts">
+                                <ion-card>
+                                    <ion-img *ngIf="post" [src]="post.imageUrl"
+                                             [routerLink]="[post.id]"></ion-img>
+                                    <ion-card-header>
+                                        <ion-card-title [routerLink]="[post.id]">{{post.title}}</ion-card-title>
+                                    </ion-card-header>
+                                    <ion-card-content>
+                                        <!--        <ion-chip routerLink="users/{{post.user.id}}">-->
+                                        <!--          <ion-avatar>-->
+                                        <!--            <img [src]="post.user.imageUrl">-->
+                                        <!--          </ion-avatar>-->
+                                        <!--          <ion-label>{{post.user.firstName}} {{post.user.lastName}}</ion-label>-->
+                                        <!--        </ion-chip>-->
+                                        {{post.creationTime | date: 'medium'}}
+                                    </ion-card-content>
+                                </ion-card>
+                                <ion-card>
+                                    <ion-grid>
+                                        <ion-row class="ion-text-center">
+                                            <ion-col>
+                                                <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+                                                <ion-chip color="primary">
+                                                    <span *ngIf="post.karma > 0">+</span>
+                                                    {{post.karma}}
+                                                </ion-chip>
+                                                <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+                                            </ion-col>
+
+                                            <ion-col>
+                                                <ion-icon name="eye-outline" size="small"></ion-icon>
+                                                <ion-chip color="primary">
+              <span *ngIf="post.countViews > 1000">
+                {{post.countViews / 1000}}K
+              </span>
+                                                    <span *ngIf="post.countViews < 1000">
+                {{post.countViews}}
+              </span>
+                                                </ion-chip>
+                                            </ion-col>
+                                            <ion-col>
+                                                <ion-icon name="chatbox-outline" size="small"></ion-icon>
+                                                <ion-chip color="primary">
+                                                    {{post.countComments}}
+                                                </ion-chip>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ion-grid>
+
+                                </ion-card>
+                            </div>
+
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+
+        </ion-list-header>
+        <ion-list-header no-lines no-padding>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-button ion-item expand="full" fill="solid" (click)="toggleSelectComment()" detail-none
+                                    [ngClass]="{'section-active': commentOpen, 'section': !commentOpen}">
+                            <ion-icon item-left name="arrow-forward" *ngIf="!commentOpen"></ion-icon>
+                            <ion-icon item-left name="arrow-down" *ngIf="commentOpen"></ion-icon>
+                            User comments
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col *ngIf="commentOpen">
+                        <ion-list *ngFor="let comment of comments">
+                            <ion-item>
+                                <ion-grid>
+                                    <ion-row>
+                                        <ion-col>
+                                            <!--            routerLink="users/{{comment.user.id}}"-->
+                                            Posted by
+                                            <ion-chip>
+                                                <ion-avatar>
+                                                    <img [src]="comment.user.imageUrl">
+                                                </ion-avatar>
+                                                <ion-text>{{comment.user.firstName}} {{comment.user.lastName}}</ion-text>
+                                            </ion-chip>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            Created at {{comment.creationTime | date: 'medium'}}
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-text>
+                                                {{comment.text}}
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-chip>
+                                                <ion-icon name="thumbs-down-outline" size="small"></ion-icon>
+                                                <ion-icon name="thumbs-up-outline" size="small"></ion-icon>
+                                                <ion-chip color="primary">
+                                                    <span *ngIf="(post | async)?.karma > 0">+</span>
+                                                    {{(post | async)?.karma}}
+                                                </ion-chip>
+                                            </ion-chip>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+                            </ion-item>
+
+                            <ion-item-options side="end" (ionSwipe)="deleteComment(comment)">
+                                <ion-item-option color="danger" expandable (click)="deleteComment(comment)">
+                                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                                    Delete
+                                </ion-item-option>
+                            </ion-item-options>
+                        </ion-list>
+
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+
+        </ion-list-header>
+
+    </ion-list>
 
 </ion-content>

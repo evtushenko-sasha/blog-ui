@@ -9,3 +9,16 @@ ion-content ion-toolbar {
   height: auto;
   border: gray solid 1px;
 }
+
+.accordion-list {
+  height: 100%;
+}
+.section {
+  background: #fff;
+  color: #000;
+  margin-bottom: 4px;
+}
+.section-active {
+  background: #3dc2ff;
+  color: #ffffff;
+}

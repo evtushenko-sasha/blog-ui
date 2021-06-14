@@ -1291,6 +1291,10 @@ export class PostService {
         }).sort((a, b) => b[sort] - a[sort]));
     }
 
+    getPostsByUserId(userId: number): ShortPostDto[] {
+        return this.posts.filter(x => x.user.id == userId);
+    }
+
     filterTagId(postTags: number[], tags: number[]) {
         let condition = true;
 
@@ -1317,7 +1321,6 @@ export class PostService {
             return p;
         });
         console.log(this.fullPosts);
-
     }
 
     getBookmarks(sort: string) {
@@ -1329,5 +1332,24 @@ export class PostService {
 
     getAvailableSorts(): Observable<string[]> {
         return of(['countComments', 'countViews', 'countBookmarks', 'karma', 'creationTime']);
+    }
+
+    getRecommendationsByPostId(postId: number) {
+        return of(PostService.getRandom(this.posts, 3));
+    }
+
+    static getRandom(arr, n) {
+        let result = new Array(n),
+            len = arr.length,
+            taken = new Array(len);
+        if (n > len) {
+            throw new RangeError('getRandom: more elements taken than available');
+        }
+        while (n--) {
+            const x = Math.floor(Math.random() * len);
+            result[n] = arr[x in taken ? taken[x] : x];
+            taken[x] = --len in taken ? taken[len] : len;
+        }
+        return result;
     }
 }

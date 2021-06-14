@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {Comment} from '../model/Comment';
-import {environment} from '../../environments/environment';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -21,11 +20,11 @@ export class CommentService {
             karma: -1,
             parentId: null,
             user: {
-                id: 1,
-                firstName: 'Oleg',
-                lastName: 'Sivchenko',
-                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/27b/f35/f6f/27bf35f6f595fc136b70c384752ba387.jpg',
-                login: 'OlegSivchenko'
+                id: 9,
+                firstName: 'Valik',
+                lastName: 'RUVDS.com',
+                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+                login: 'ValikRUVDS.com'
             }
         },
         {
@@ -111,11 +110,11 @@ export class CommentService {
             karma: -1,
             parentId: null,
             user: {
-                id: 5,
-                firstName: 'Companu',
-                lastName: 'VDSina.ru',
-                imageUrl: 'https://habrastorage.org/getpro/habr/company/349/b75/e68/349b75e680748f727261c7de1a4e1c5f.png',
-                login: 'VDSina.ru'
+                id: 9,
+                firstName: 'Valik',
+                lastName: 'RUVDS.com',
+                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+                login: 'ValikRUVDS.com'
             }
         },
         {
@@ -201,11 +200,11 @@ export class CommentService {
             karma: -1,
             parentId: null,
             user: {
-                id: 5,
-                firstName: 'Companu',
-                lastName: 'VDSina.ru',
-                imageUrl: 'https://habrastorage.org/getpro/habr/company/349/b75/e68/349b75e680748f727261c7de1a4e1c5f.png',
-                login: 'VDSina.ru'
+                id: 9,
+                firstName: 'Valik',
+                lastName: 'RUVDS.com',
+                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+                login: 'ValikRUVDS.com'
             }
         },
         {
@@ -246,11 +245,11 @@ export class CommentService {
             karma: -1,
             parentId: null,
             user: {
-                id: 7,
-                firstName: 'Маклауд',
-                lastName: 'Verlan',
-                imageUrl: 'https://www.wmj.ru/thumb/0x1502/filters:quality(75):no_upscale()/imgs/2017/11/08/13/1145577/02f490db91711eb4e7ef37ecedd7e2e9cb02dea6.jpg"',
-                login: 'МаклаудVerlan'
+                id: 9,
+                firstName: 'Valik',
+                lastName: 'RUVDS.com',
+                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+                login: 'ValikRUVDS.com'
             }
         },
         {
@@ -321,11 +320,11 @@ export class CommentService {
             karma: -1,
             parentId: null,
             user: {
-                id: 7,
-                firstName: 'Маклауд',
-                lastName: 'Verlan',
-                imageUrl: 'https://www.wmj.ru/thumb/0x1502/filters:quality(75):no_upscale()/imgs/2017/11/08/13/1145577/02f490db91711eb4e7ef37ecedd7e2e9cb02dea6.jpg"',
-                login: 'МаклаудVerlan'
+                id: 9,
+                firstName: 'Valik',
+                lastName: 'RUVDS.com',
+                imageUrl: 'https://habrastorage.org/getpro/habr/avatars/f8e/004/d87/f8e004d878b0e35c2defaaca5386ae70.png',
+                login: 'ValikRUVDS.com'
             }
         },
         {
@@ -352,6 +351,10 @@ export class CommentService {
 
     addComment(comment: Comment): Promise<any> {
         return of(this.comments.push(comment)).toPromise();
+    }
+
+    getCommentByUserId(userId: number): Comment[] {
+        return this.comments.filter(c => c.user.id == userId);
     }
 
     getSortTypes(): Observable<string[]> {
